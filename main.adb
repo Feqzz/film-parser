@@ -15,6 +15,8 @@ procedure Main is
    currentArgument : Ada.Strings.Unbounded.Unbounded_String;
    filmScore : Integer;
    showScore : Boolean := False;
+   showImdb : Boolean := False;
+   showOnlyImdb: Boolean := False;
 
 begin
 
@@ -22,15 +24,22 @@ begin
       Ada.Text_IO.Put_Line("You forgot to pass the file as an argument!");
       return;
    end if;
-   
+
    for I in 1 .. (Ada.Command_Line.Argument_Count - 1) loop
 
       if Ada.Command_Line.Argument(I + 1) = "--score" then
          showScore := True;
+
+      elsif Ada.Command_Line.Argument(I + 1) = "--imdb" then
+         showImdb := True;
+
+      elsif Ada.Command_Line.Argument(I + 1) = "--only_imdb" then
+         showImdb := True;
+         showOnlyImdb := True;
       end if;
-      
+
    end loop;
-   
+
    counter := 0;
 
    fileName := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(1));
@@ -41,57 +50,65 @@ begin
       exit when Ada.Text_IO.End_Of_File(fileType);
 
       currentLine := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Text_IO.Get_Line(fileType));
+
       if (Ada.Strings.Fixed.Index (Ada.Strings.Unbounded.To_String(currentLine), "<a class=""l_movie""") > 0) then
          --Found a movie!
          counter := counter + 1;
 
-         for J in 1 .. Ada.Strings.Unbounded.Length (currentLine) loop
-            if Ada.Strings.Unbounded.Element (currentLine, J) = '>' then
+         if not showOnlyImdb then
 
-               for K in (J + 1) .. Ada.Strings.Unbounded.Length (currentLine) loop
+            for J in 1 .. Ada.Strings.Unbounded.Length (currentLine) loop
+               if Ada.Strings.Unbounded.Element (currentLine, J) = '>' then
 
-                  if Ada.Strings.Unbounded.Element (currentLine, K) = '<' then
-                     Ada.Text_IO.Put(" ");
-                     for L in 1 .. 6 loop
+                  for K in (J + 1) .. Ada.Strings.Unbounded.Length (currentLine) loop
 
-                        Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(currentLine, (K + 4 + L)));
+                     if Ada.Strings.Unbounded.Element (currentLine, K) = '<' then
+                        Ada.Text_IO.Put(" ");
+                        for L in 1 .. 6 loop
 
-                     end loop;
-                     exit;
-                  end if;
-                  Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(currentLine, K));
-               end loop;
+                           Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(currentLine, (K + 4 + L)));
 
-               exit;
+                        end loop;
+                        exit;
+                     end if;
+                     Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(currentLine, K));
+                  end loop;
 
-            end if;
-         end loop;
-         
-         
-         if showScore then
-            
+                  exit;
+
+               end if;
+            end loop;
+         end if;
+
+         if showImdb then
+            Ada.Text_IO.Put(" ");
+            Ada.Text_IO.Put(Ada.Strings.Unbounded.To_String(Parser.getImdbMovieId(currentLine)));
+         end if;
+
+         if showScore and (not showOnlyImdb) then
+
             --Skips 6 lines in the HTML file.
             for I in 1 .. 6 loop
                currentLine := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Text_IO.Get_Line(fileType));
             end loop;
 
             if (Ada.Strings.Fixed.Index (Ada.Strings.Unbounded.To_String(currentLine), "<span id=") > 0) then
-            
+
                Ada.Text_IO.Put(" ");
                filmScore := Parser.getRating(currentLine);
-            
+
                if filmScore = -1 then
                   Ada.Text_IO.Put("Seen");
                else
                   Ada.Integer_Text_IO.Put(filmScore, 2);
                end if;
-            
+
             end if;
-            
+
          end if;
-         
+
          Ada.Text_IO.New_Line;
-         
+
       end if;
 
    end loop;
