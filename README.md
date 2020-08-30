@@ -18,4 +18,4 @@ Lawrence of Arabia [1962]
 ```
 
 # How to use
-`./main file.html`
+`./film-parser file.html`
