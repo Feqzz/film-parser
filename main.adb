@@ -17,7 +17,8 @@ begin
 
    if Ada.Command_Line.Argument_Count < 1 then
       Ada.Text_IO.Put_Line("You forgot to pass the file as an argument!");
-      Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
+      return;
+      --Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
    end if;
 
    counter := 0;
@@ -63,7 +64,8 @@ begin
 
    if counter = 0 then
       Ada.Text_IO.Put("Sorry! Your file was not accepted.");
-      Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
+      return;
+      --Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
    end if;
 
    Ada.Text_IO.Put("You have seen a total of ");
