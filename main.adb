@@ -4,6 +4,7 @@ with Ada.Strings.Fixed;
 with Ada.Command_Line;
 with Ada.Integer_Text_IO;
 with Ada.Task_Identification;
+with Parser;
 
 procedure Main is
 
@@ -12,15 +13,24 @@ procedure Main is
    counter: Integer;
    currentLine : Ada.Strings.Unbounded.Unbounded_String;
    currentArgument : Ada.Strings.Unbounded.Unbounded_String;
+   filmScore : Integer;
+   showScore : Boolean := False;
 
 begin
 
    if Ada.Command_Line.Argument_Count < 1 then
       Ada.Text_IO.Put_Line("You forgot to pass the file as an argument!");
       return;
-      --Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
    end if;
+   
+   for I in 1 .. (Ada.Command_Line.Argument_Count - 1) loop
 
+      if Ada.Command_Line.Argument(I + 1) = "--score" then
+         showScore := True;
+      end if;
+      
+   end loop;
+   
    counter := 0;
 
    fileName := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Command_Line.Argument(1));
@@ -52,12 +62,36 @@ begin
                   Ada.Text_IO.Put(Ada.Strings.Unbounded.Element(currentLine, K));
                end loop;
 
-               Ada.Text_IO.New_Line;
                exit;
 
             end if;
          end loop;
+         
+         
+         if showScore then
+            
+            --Skips 6 lines in the HTML file.
+            for I in 1 .. 6 loop
+               currentLine := Ada.Strings.Unbounded.To_Unbounded_String(Ada.Text_IO.Get_Line(fileType));
+            end loop;
 
+            if (Ada.Strings.Fixed.Index (Ada.Strings.Unbounded.To_String(currentLine), "<span id=") > 0) then
+            
+               Ada.Text_IO.Put(" ");
+               filmScore := Parser.getRating(currentLine);
+            
+               if filmScore = -1 then
+                  Ada.Text_IO.Put("Seen");
+               else
+                  Ada.Integer_Text_IO.Put(filmScore, 2);
+               end if;
+            
+            end if;
+            
+         end if;
+         
+         Ada.Text_IO.New_Line;
+         
       end if;
 
    end loop;
@@ -65,7 +99,6 @@ begin
    if counter = 0 then
       Ada.Text_IO.Put("Sorry! Your file was not accepted.");
       return;
-      --Ada.Task_Identification.Abort_Task (Ada.Task_Identification.Current_Task);
    end if;
 
    Ada.Text_IO.Put("You have seen a total of ");
@@ -74,4 +107,3 @@ begin
 
    null;
 end Main;
-

@@ -7,7 +7,7 @@ all: build clean
 build:
 	$(CC) $(PROG).adb -o $(NAME)
 clean:
-	rm -f $(PROG)*.ali $(PROG)*.o 
+	rm -f *.ali *.o 
 install:
 	install $(NAME) $(DEST)
 uninstall:
