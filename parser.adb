@@ -1,9 +1,13 @@
 package body Parser is
 
-   function getImdbMovieId (Var : Ada.Strings.Unbounded.Unbounded_String) return Ada.Strings.Unbounded.Unbounded_String is
+   --------------------
+   -- GetImdbMovieId --
+   --------------------
+
+   function GetImdbMovieId (Var : Ada.Strings.Unbounded.Unbounded_String) return Ada.Strings.Unbounded.Unbounded_String is
       tmpString : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      for I in 41 .. Ada.Strings.Unbounded.Length (Var) loop
+      for I in 39 .. Ada.Strings.Unbounded.Length (Var) loop
 
          if (Ada.Strings.Unbounded.Element (Var, I) = '"') then
             return tmpString;
@@ -14,9 +18,13 @@ package body Parser is
       end loop;
       return tmpString;
 
-   end getImdbMovieId;
+   end GetImdbMovieId;
 
-   function getRating (Var : Ada.Strings.Unbounded.Unbounded_String) return Integer is
+   ---------------
+   -- GetRating --
+   ---------------
+
+   function GetRating (Var : Ada.Strings.Unbounded.Unbounded_String) return Integer is
       tmpRating : Ada.Strings.Unbounded.Unbounded_String;
    begin
       for I in 1 .. Ada.Strings.Unbounded.Length (Var) loop
@@ -39,9 +47,8 @@ package body Parser is
       end loop;
 
       Ada.Text_IO.Put_Line(Ada.Strings.Unbounded.To_String(tmpRating));
-
       return Integer'Value (Ada.Strings.Unbounded.To_String (tmpRating));
 
-   end getRating;
+   end GetRating;
 
 end Parser;
