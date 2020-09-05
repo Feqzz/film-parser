@@ -22,3 +22,7 @@ Lawrence of Arabia [1962]
 
 # Optional Arguments
 `--score` Shows the score for each movie. If there is none, 'Seen' is displayed.
+
+`--imdb` Appends the IMDb tag for each movie. Example: (tt0092550).
+
+`--only_imdb` Overrides the other arguments and displays only the IMDb tags.
