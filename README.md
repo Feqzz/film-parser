@@ -26,3 +26,34 @@ Lawrence of Arabia [1962]
 `--imdb` Appends the IMDb tag for each movie. Example: (tt0092550).
 
 `--only_imdb` Overrides the other arguments and displays only the IMDb tags.
+
+`--json` Writes to json file.
+
+# JSON format
+
+``` json
+{
+  "name": "Films watched 5 9 2020",
+  "films": [
+        {
+         "title": "Anima",
+         "year": "2019",
+         "score": "100",
+         "imdb": "tt10516984"
+        },
+        {
+         "title": "Apollo 11",
+         "year": "2019",
+         "score": "100",
+         "imdb": "tt8760684"
+        },
+        {
+         "title": "The Grand Budapest Hotel",
+         "year": "2014",
+         "score": "100",
+         "imdb": "tt2278388"
+        },
+        ...
+  ]
+}
+```
