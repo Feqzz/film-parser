@@ -23,11 +23,25 @@ procedure Main is
    showOnlyImdb: Boolean := False;
    writeToFile: Boolean := False;
 
+   procedure PrintUsage is
+   begin
+       Ada.Text_IO.Put_Line("Usage: film-parser <file.html> [options]");
+       Ada.Text_IO.Put_Line("    --score     Shows the score for each movie. If there is none, 'Seen' is displayed");
+       Ada.Text_IO.Put_Line("    --imdb      Appends the IMDb tab for each movie. Example: (tt0092550)");
+       Ada.Text_IO.Put_Line("    --only_imdb Overrides the other arguments and displays only the IMDb tags.");
+       Ada.Text_IO.Put_Line("    --json      Writes to json file.");
+   end PrintUsage;
+
 begin
 
    if Ada.Command_Line.Argument_Count < 1 then
-      Ada.Text_IO.Put_Line("You forgot to pass the file as an argument!");
+      PrintUsage;
       return;
+   end if;
+
+   if Ada.Command_Line.Argument(1) = "--help" or Ada.Command_Line.Argument(1) = "-h" then
+       PrintUsage;
+       return;
    end if;
 
    for I in 1 .. (Ada.Command_Line.Argument_Count - 1) loop
@@ -154,3 +168,4 @@ begin
 
    null;
 end Main;
+
