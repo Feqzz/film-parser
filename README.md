@@ -18,7 +18,7 @@ Lawrence of Arabia [1962]
 ```
 
 # How to use
-`./film-parser file.html`
+`./film-parser file.html [options]`
 
 # Optional Arguments
 `--score` Shows the score for each movie. If there is none, 'Seen' is displayed.
